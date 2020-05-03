@@ -4,7 +4,7 @@
   "description": "PayPal hello world",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "keywords": [
     "paypal"
@@ -15,6 +15,7 @@
     "dotenv": "^8.2.0"
   },
   "dependencies": {
+    "@paypal/checkout-server-sdk": "^1.0.2",
     "express": "^4.17.1",
     "paypal-rest-sdk": "^1.8.1"
   }

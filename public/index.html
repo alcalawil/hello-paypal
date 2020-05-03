@@ -1,5 +1,63 @@
-<h1>Store</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script
+      src="https://www.paypal.com/sdk/js?client-id=AedfhNkqTtGDZEp5tsi21-KYd57ICSQMB94gUXpLHNiavogprdLYfmJjlxfu0JR1j1Nr9-h8ittQGdJn"
+    >
+      // Required. Replace SB_CLIENT_ID with your sandbox client ID.
+    </script>
+    <h1>Store</h1>
 
-<a href="/buy">
-  <button>BUY</button>
-</a>
+    <a href="/buy">
+      <button>BUY</button>
+    </a>
+
+    <div id="paypal-buttons"></div>
+    <script>
+      paypal
+        .Buttons({
+          createOrder: function () {
+            return fetch("/buy", {
+              method: "post",
+              headers: {
+                "content-type": "application/json",
+              },
+            })
+              .then(function (res) {
+                return res.json();
+              })
+              .then(function (data) {
+                console.log(data);
+                return data.orderID; // Use the same key name for order ID on the client and server
+              });
+          },
+          onApprove: function (data) {
+            return fetch("/capture", {
+              method: "post",
+              headers: {
+                "content-type": "application/json",
+              },
+              body: JSON.stringify({
+                orderID: data.orderID,
+              }),
+            })
+              .then(function (res) {
+                return res.json();
+              })
+              .then(function ({ payerName }) {
+                alert(
+                  "Transaction funds captured from " + payerName
+                );
+              });
+          },
+        })
+        .render("#paypal-buttons");
+      // This function displays Smart Payment Buttons on your web page.
+    </script>
+  </body>
+</html>
